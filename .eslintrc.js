@@ -3,6 +3,7 @@ module.exports = {
 		browser: false,
 		es6: true,
 		jest: true,
+		node: true
 	},
 	extends: [
 		'airbnb-base',
@@ -32,5 +33,12 @@ module.exports = {
 			files: ['*.js'],
 			excludedFiles: 'babel.config.js',
 		}
-	]
+	],
+	settings: {
+		'import/resolver': {
+		  node: {
+			extensions: ['.js']
+		  }
+		}
+	  },
 };
