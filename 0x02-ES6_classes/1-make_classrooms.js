@@ -1,5 +1,5 @@
 // Implement a function named initializeRooms
-import ClassRoom from './0-classroom.js';
+import ClassRoom from './0-classroom';
 
 export default function initializeRooms() {
   const rooms = [
