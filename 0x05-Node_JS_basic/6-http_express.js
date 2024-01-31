@@ -7,7 +7,7 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res, next) => {
-  res.status(404).send('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Error</title></head><body><pre>Cannot GET ' + req.url + '</pre></body></html>');
+  res.status(404).send(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Error</title></head><body><pre>Cannot GET ${req.url}</pre></body></html>`);
 });
 
 const PORT = 1245;

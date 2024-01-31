@@ -9,17 +9,13 @@ function countStudents(path) {
 
     lines.forEach((line) => {
       const [, , , field] = line.split(',');
-      if (field in fieldCounts) {
-        fieldCounts[field]++;
-      } else {
-        fieldCounts[field] = 1;
-      }
+      fieldCounts[field] = (fieldCounts[field] || 0) + 1; // Increment the count for the field
     });
 
     console.log(`Number of students: ${lines.length}`);
 
     Object.entries(fieldCounts).forEach(([field, count]) => {
-      const students = lines.filter(line => line.endsWith(`,${field}`)).map(line => line.split(',')[0]);
+      const students = lines.filter((line) => line.endsWith(`,${field}`)).map((line) => line.split(',')[0]);
       console.log(`Number of students in ${field}: ${count}. List: ${students.join(', ')}`);
     });
   } catch (error) {
