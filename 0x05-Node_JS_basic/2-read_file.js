@@ -2,11 +2,14 @@ const fs = require('fs');
 
 function countStudents(fileName) {
   const students = {};
-  const fields = {};
+  const stdcounts = {};
   let length = 0;
+
   try {
-    const fileContents = fs.readFileSync(fileName, 'utf-8');
-    const lines = fileContents.toString().split('\n');
+    const fileData = fs.readFileSync(fileName, 'utf-8');
+
+    const lines = fileData.toString().split('\n');
+
     for (let i = 0; i < lines.length; i += 1) {
       if (lines[i]) {
         length += 1;
@@ -16,16 +19,18 @@ function countStudents(fileName) {
         } else {
           students[field[3]] = [field[0]];
         }
-        if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
-          fields[field[3]] += 1;
+        if (Object.prototype.hasOwnProperty.call(stdcounts, field[3])) {
+          stdcounts[field[3]] += 1;
         } else {
-          fields[field[3]] = 1;
+          stdcounts[field[3]] = 1;
         }
       }
     }
+
     const l = length - 1;
     console.log(`Number of students: ${l}`);
-    for (const [key, value] of Object.entries(fields)) {
+
+    for (const [key, value] of Object.entries(stdcounts)) {
       if (key !== 'field') {
         console.log(`Number of students in ${key}: ${value}. List: ${students[key].join(', ')}`);
       }
