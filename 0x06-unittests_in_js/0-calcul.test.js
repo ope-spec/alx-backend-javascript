@@ -12,7 +12,7 @@ describe('calculateNumber()', () => {
     assert.strictEqual(res, 5);
   });
   it('should return 6 when adding 1.5 and 3.7', () => {
-    const res = calculateNumber(1.6, 3.7);
-    assert.strictEqual(res, 5);
+    const res = calculateNumber(1.5, 3.7);
+    assert.strictEqual(res, 6);
   });
 });
