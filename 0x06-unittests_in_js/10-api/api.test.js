@@ -10,13 +10,14 @@ describe('index', () => {
 
   it('check correct status code', () => new Promise((done) => {
     request(options, (err, res) => {
-      expect(res.statusCode).to.equal(200);
+      expect(res.statusCode).toBe(200);
       done();
     });
   }));
+
   it('check correct content', () => new Promise((done) => {
     request(options, (err, res, body) => {
-      expect(body).to.equal('Welcome to the payment system');
+      expect(body).toBe('Welcome to the payment system');
       done();
     });
   }));
@@ -32,10 +33,11 @@ describe('login', () => {
       },
     };
     request.post(opt, (err, res) => {
-      expect(res.statusCode).to.equal(200);
+      expect(res.statusCode).toBe(200);
       done();
     });
   }));
+
   it("check correct content for request that's sent properly", () => new Promise((done) => {
     const opts = {
       url: 'http://localhost:7865/login',
@@ -46,13 +48,14 @@ describe('login', () => {
     };
     request.post(opts, (err, res, body) => {
       if (err) {
-        expect(res.statusCode).to.not.equal(200);
+        expect(res.statusCode).not.toBe(200);
       } else {
-        expect(body).to.contain('Welcome JOE');
+        expect(body).toContain('Welcome JOE');
       }
       done();
     });
   }));
+
   it("check correct status code for request that's not sent properly", () => new Promise((done) => {
     const op = {
       url: 'http://localhost:7865/login',
@@ -62,7 +65,7 @@ describe('login', () => {
       },
     };
     request.post(op, (err, res) => {
-      expect(res.statusCode).to.equal(404);
+      expect(res.statusCode).toBe(404);
       done();
     });
   }));
@@ -70,14 +73,15 @@ describe('login', () => {
 
 describe('cart', () => {
   it('check correct status code for correct url', () => new Promise((done) => {
-    request.get('http://localhost:7865/cart/12', (err, res, body) => {
-      expect(res.statusCode).to.equal(200);
+    request.get('http://localhost:7865/cart/12', (err, res) => {
+      expect(res.statusCode).toBe(200);
       done();
     });
   }));
+
   it('check correct content for correct url', () => new Promise((done) => {
     request.get('http://localhost:7865/cart/12', (err, res, body) => {
-      expect(body).to.equal('Payment methods for cart 12');
+      expect(body).toBe('Payment methods for cart 12');
       done();
     });
   }));
@@ -85,15 +89,16 @@ describe('cart', () => {
 
 describe('available_payments', () => {
   it('check correct status for correct url', () => new Promise((done) => {
-    request.get('http://localhost:7865/available_payments', (err, res, body) => {
+    request.get('http://localhost:7865/available_payments', (err, res) => {
       if (err) {
-        expect(res.statusCode).to.not.equal(200);
+        expect(res.statusCode).not.toBe(200);
       } else {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).toBe(200);
       }
       done();
     });
   }));
+
   it('check correct body content for correct url', () => new Promise((done) => {
     const option = { json: true };
     const payLoad = {
@@ -104,9 +109,9 @@ describe('available_payments', () => {
     };
     request.get('http://localhost:7865/available_payments', option, (err, res, body) => {
       if (err) {
-        expect(res.statusCode).to.not.equal(200);
+        expect(res.statusCode).not.toBe(200);
       } else {
-        expect(body).to.deep.equal(payLoad);
+        expect(body).toStrictEqual(payLoad);
       }
       done();
     });
