@@ -1,26 +1,30 @@
-import fs from 'fs';
+const { readFile } = require('fs');
 
-export function readDatabase(filePath) {
+module.exports = function readDatabase(filePath) {
+  const studentsByField = {};
+
   return new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', (err, data) => {
+    readFile(filePath, (err, data) => {
       if (err) {
-        reject(new Error('Cannot load the database'));
-        return;
-      }
+        reject(err);
+      } else {
+        const lines = data.toString().split('\n');
+        const noHeader = lines.slice(1);
 
-      const lines = data.trim().split('\n').filter(Boolean);
+        for (let i = 0; i < noHeader.length; i += 1) {
+          if (noHeader[i]) {
+            const field = noHeader[i].toString().split(',');
 
-      const studentsByField = {};
-
-      lines.forEach((line) => {
-        const [, firstName, , field] = line.split(',');
-        if (!studentsByField[field]) {
-          studentsByField[field] = [];
+            if (Object.prototype.hasOwnProperty.call(studentsByField, field[3])) {
+              studentsByField[field[3]].push(field[0]);
+            } else {
+              studentsByField[field[3]] = [field[0]];
+            }
+          }
         }
-        studentsByField[field].push(firstName);
-      });
 
-      resolve(studentsByField);
+        resolve(studentsByField);
+      }
     });
   });
-}
+};
