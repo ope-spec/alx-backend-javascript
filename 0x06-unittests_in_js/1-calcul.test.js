@@ -1,36 +1,31 @@
-const calculateNumber = require('./1-calcul');
+const assert = require("assert");
+const { it, describe } = require("mocha");
+const calculateNumber = require("./1-calcul");
 
-describe('calculateNumber', () => {
-  describe('sUM', () => {
-    it('should return the sum of two rounded numbers', () => {
-      expect.assertions(1);
-      expect(calculateNumber('SUM', 1.4, 4.5)).toBe(6);
-    });
-  });
+describe("calculateNumber()", function() {
 
-  describe('sUBTRACT', () => {
-    it('should return the subtraction of two rounded numbers', () => {
-      expect.assertions(1);
-      expect(calculateNumber('SUBTRACT', 1.4, 4.5)).toBe(-4);
+    it(`checking if numbers round`, function() {
+      const res = calculateNumber("SUM", 4, 2);
+      assert.strictEqual(res, 6);
     });
-  });
-
-  describe('dIVIDE', () => {
-    it('should return the division of two rounded numbers', () => {
-      expect.assertions(1);
-      expect(calculateNumber('DIVIDE', 1.4, 4.5)).toBe(0.2);
+    it(`checking if numbers round`, function() {
+      const res = calculateNumber("SUBTRACT", 3.6, 1);
+      assert.strictEqual(res, 3);
     });
-
-    it('should return "Error" when dividing by 0', () => {
-      expect.assertions(1);
-      expect(calculateNumber('DIVIDE', 1.4, 0)).toBe('Error');
+    it(`checking if numbers round`, function() {
+      const res = calculateNumber("SUBTRACT", 3.9, 2.7);
+      assert.strictEqual(res, 1);
     });
-  });
-
-  describe('invalid operation type', () => {
-    it('should return "Invalid operation type" when an invalid operation type is provided', () => {
-      expect.assertions(1);
-      expect(calculateNumber('INVALID', 1.4, 4.5)).toBe('Invalid operation type');
+    it(`checking if numbers round`, function() {
+      const res = calculateNumber("DIVIDE", 6, 2);
+      assert.strictEqual(res, 3);
     });
-  });
+    it(`checking if numbers round`, function() {
+      const res = calculateNumber("DIVIDE", 4, 0);
+      assert.strictEqual(res, "Error");
+    });
+    it(`checking if numbers round`, function() {
+      const res = calculateNumber("DIVIDE", 2.5, 1.3);
+      assert.strictEqual(res, 3);
+    });
 });
