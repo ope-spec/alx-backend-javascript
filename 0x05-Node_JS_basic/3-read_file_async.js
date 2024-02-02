@@ -9,8 +9,7 @@ function countstudentFields(fileName) {
     readFile(fileName, (error, data) => {
       if (error) {
         reject(Error('Cannot load the database'));
-      }
-	  else {
+      } else {
         const lines = data.toString().split('\n');
 
         for (let i = 0; i < lines.length; i += 1) {
@@ -24,8 +23,7 @@ function countstudentFields(fileName) {
             }
             if (Object.prototype.hasOwnProperty.call(fieldCounts, field[3])) {
               fieldCounts[field[3]] += 1;
-            }
-			else {
+            } else {
               fieldCounts[field[3]] = 1;
             }
           }
@@ -40,7 +38,6 @@ function countstudentFields(fileName) {
         }
 
         resolve(data);
-
       }
     });
   });
