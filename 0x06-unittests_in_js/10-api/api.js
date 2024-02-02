@@ -9,27 +9,31 @@ app.get('/', (req, res) => {
   res.send('Welcome to the payment system');
 });
 
-app.get('/cart/:id([0-9]+)', (req, res) => {
-  res.send(`Payment methods for cart ${req.params.id}`);
+app.get('/cart/:id', (req, res) => {
+  const cartId = req.params.id;
+  if (!isNaN(cartId)) {
+    res.send(`Payment methods for cart ${cartId}`);
+  } else {
+    res.status(400).send('Invalid cart ID');
+  }
 });
 
 app.get('/available_payments', (req, res) => {
-  res.set('Content-Type', 'application/json');
-  const payMethods = {
+  const paymentMethods = {
     payment_methods: {
       credit_cards: true,
       paypal: false,
     },
   };
-  res.send(payMethods);
+  res.json(paymentMethods);
 });
 
 app.post('/login', (req, res) => {
-  const userName = req.body;
-  if (userName) {
-    res.send(`Welcome ${userName}`);
+  const { username } = req.body;
+  if (username) {
+    res.send(`Welcome ${username}`);
   } else {
-    res.status(404).send();
+    res.status(400).send('Username is required');
   }
 });
 

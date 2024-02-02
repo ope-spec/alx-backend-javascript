@@ -1,62 +1,51 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jest/no-test-return-statement */
-/* eslint-disable jest/valid-expect */
-
 const request = require('request');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
-describe('login endpoint', () => {
-  const option = {
-    url: 'http://localhost:7865/',
-    method: 'GET',
-  };
-  it('check correct status code', () => {
-    expect.hasAssertions();
-    return new Promise((done) => {
-      request(option, (err, res) => {
-        expect(res.statusCode).to.equal(200);
-        done();
-      });
+describe('aPI Tests', () => {
+  it('gET / should return "Welcome to the payment system"', () => new Promise((done) => {
+    request('http://localhost:7865/', (error, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.equal('Welcome to the payment system');
+      done();
     });
-  });
-  it('check correct content', () => {
-    expect.hasAssertions();
-    return new Promise((done) => {
-      request(option, (err, res, body) => {
-        expect(body).to.equal('Welcome to the payment system');
-        done();
-      });
-    });
-  });
-});
+  }));
 
-describe('available payments endpoint', () => {
-  it('check correct status for correct url', () => {
-    expect.hasAssertions();
-    request.get('http://localhost:7865/available_payments', (err, res) => {
-      if (err) {
-        expect(res.statusCode).to.not.equal(200);
-      } else {
-        expect(res.statusCode).to.equal(200);
-      }
+  it('gET /cart/:id should return "Payment methods for cart {id}" when :id is a number', () => new Promise((done) => {
+    request('http://localhost:7865/cart/12', (error, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.equal('Payment methods for cart 12');
+      done();
     });
-  });
-  it('check correct body content for correct url', () => {
-    expect.hasAssertions();
-    const option = { json: true };
-    const payLoad = {
-      payment_methods: {
-        credit_cards: true,
-        paypal: false,
-      },
-    };
-    request.get('http://localhost:7865/available_payments', option, (err, res, body) => {
-      if (err) {
-        expect(res.statusCode).to.not.equal(200);
-      } else {
-        expect(body).to.deep.equal(payLoad);
-      }
+  }));
+
+  it('gET /cart/:id should return 400 status code when :id is NOT a number', () => new Promise((done) => {
+    request('http://localhost:7865/cart/hello', (error, response) => {
+      expect(response.statusCode).to.equal(400);
+      done();
     });
-  });
+  }));
+
+  it('gET /available_payments should return the right object', () => new Promise((done) => {
+    request('http://localhost:7865/available_payments', (error, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.equal('{"payment_methods":{"credit_cards":true,"paypal":false}}');
+      done();
+    });
+  }));
+
+  it('pOST /login should return the right message', () => new Promise((done) => {
+    request.post('http://localhost:7865/login', { json: { username: 'John' } }, (error, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      expect(body).to.equal('Welcome John');
+      done();
+    });
+  }));
+
+  it('pOST /login should return 400 status code when username is missing', () => new Promise((done) => {
+    request.post('http://localhost:7865/login', (error, response) => {
+      expect(response.statusCode).to.equal(400);
+      done();
+    });
+  }));
 });
