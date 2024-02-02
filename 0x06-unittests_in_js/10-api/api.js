@@ -9,22 +9,23 @@ app.get('/', (req, res) => {
   res.send('Welcome to the payment system');
 });
 
-app.get('/cart/:id(\\d+)', (req, res) => {
+app.get('/cart/:id([0-9]+)', (req, res) => {
   res.send(`Payment methods for cart ${req.params.id}`);
 });
 
 app.get('/available_payments', (req, res) => {
+  res.set('Content-Type', 'application/json');
   const payMethods = {
     payment_methods: {
       credit_cards: true,
       paypal: false,
     },
   };
-  res.json(payMethods);
+  res.send(payMethods);
 });
 
 app.post('/login', (req, res) => {
-  const { userName } = req.body;
+  const userName = req.body;
   if (userName) {
     res.send(`Welcome ${userName}`);
   } else {
@@ -32,8 +33,8 @@ app.post('/login', (req, res) => {
   }
 });
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
   console.log(`API available on localhost port ${port}`);
 });
 
-module.exports = server;
+module.exports = app;

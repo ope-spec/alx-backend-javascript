@@ -1,49 +1,100 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jest/no-test-return-statement */
-/* eslint-disable jest/valid-expect */
-
 const request = require('request');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
-describe('login endpoint', () => {
-  const option = {
+describe('index', () => {
+  const options = {
     url: 'http://localhost:7865/',
     method: 'GET',
   };
-  it('check correct status code', () => {
-    expect.hasAssertions();
-    return new Promise((done) => {
-      request(option, (err, res) => {
-        expect(res.statusCode).to.equal(200);
-        done();
-      });
+
+  it('check correct status code', () => new Promise((done) => {
+    request(options, (err, res) => {
+      expect(res.statusCode).to.equal(200);
+      done();
     });
-  });
-  it('check correct content', () => {
-    expect.hasAssertions();
-    return new Promise((done) => {
-      request(option, (err, res, body) => {
-        expect(body).to.equal('Welcome to the payment system');
-        done();
-      });
+  }));
+  it('check correct content', () => new Promise((done) => {
+    request(options, (err, res, body) => {
+      expect(body).to.equal('Welcome to the payment system');
+      done();
     });
-  });
+  }));
 });
 
-describe('available payments endpoint', () => {
-  it('check correct status for correct url', () => {
-    expect.hasAssertions();
-    request.get('http://localhost:7865/available_payments', (err, res) => {
+describe('login', () => {
+  it("check correct status code for request that's sent properly", () => new Promise((done) => {
+    const opt = {
+      url: 'http://localhost:7865/login',
+      json: true,
+      body: {
+        userName: 'JOE',
+      },
+    };
+    request.post(opt, (err, res) => {
+      expect(res.statusCode).to.equal(200);
+      done();
+    });
+  }));
+  it("check correct content for request that's sent properly", () => new Promise((done) => {
+    const opts = {
+      url: 'http://localhost:7865/login',
+      json: true,
+      body: {
+        userName: 'JOE',
+      },
+    };
+    request.post(opts, (err, res, body) => {
+      if (err) {
+        expect(res.statusCode).to.not.equal(200);
+      } else {
+        expect(body).to.contain('Welcome JOE');
+      }
+      done();
+    });
+  }));
+  it("check correct status code for request that's not sent properly", () => new Promise((done) => {
+    const op = {
+      url: 'http://localhost:7865/login',
+      json: true,
+      body: {
+        usame: 'JOE',
+      },
+    };
+    request.post(op, (err, res) => {
+      expect(res.statusCode).to.equal(404);
+      done();
+    });
+  }));
+});
+
+describe('cart', () => {
+  it('check correct status code for correct url', () => new Promise((done) => {
+    request.get('http://localhost:7865/cart/12', (err, res, body) => {
+      expect(res.statusCode).to.equal(200);
+      done();
+    });
+  }));
+  it('check correct content for correct url', () => new Promise((done) => {
+    request.get('http://localhost:7865/cart/12', (err, res, body) => {
+      expect(body).to.equal('Payment methods for cart 12');
+      done();
+    });
+  }));
+});
+
+describe('available_payments', () => {
+  it('check correct status for correct url', () => new Promise((done) => {
+    request.get('http://localhost:7865/available_payments', (err, res, body) => {
       if (err) {
         expect(res.statusCode).to.not.equal(200);
       } else {
         expect(res.statusCode).to.equal(200);
       }
+      done();
     });
-  });
-  it('check correct body content for correct url', () => {
-    expect.hasAssertions();
+  }));
+  it('check correct body content for correct url', () => new Promise((done) => {
     const option = { json: true };
     const payLoad = {
       payment_methods: {
@@ -57,6 +108,7 @@ describe('available payments endpoint', () => {
       } else {
         expect(body).to.deep.equal(payLoad);
       }
+      done();
     });
-  });
+  }));
 });
