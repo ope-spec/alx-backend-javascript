@@ -10,8 +10,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/cart/:id', (req, res) => {
-  const cartId = req.params.id;
-  if (!isNaN(cartId)) {
+  const cartId = Number(req.params.id);
+  if (!Number.isNaN(cartId)) {
     res.send(`Payment methods for cart ${cartId}`);
   } else {
     res.status(400).send('Invalid cart ID');
