@@ -22,7 +22,7 @@ describe("calculateNumber()", function() {
     });
     it(`checking if numbers round`, function() {
       const res = calculateNumber(-1.8, -1.5);
-      assert.strictEqual(res, -4);
+      assert.strictEqual(res, -3);
     });
     it(`checking if numbers round`, function() {
       const res = calculateNumber(-1.4, -1.3);
