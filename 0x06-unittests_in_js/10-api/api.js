@@ -9,36 +9,31 @@ app.get('/', (req, res) => {
   res.send('Welcome to the payment system');
 });
 
-app.get('/cart/:id', (req, res) => {
-  const cartId = req.params.id;
-  if (!isNaN(cartId)) {
-    res.send(`Payment methods for cart ${cartId}`);
-  } else {
-    res.status(400).send('Invalid cart ID');
-  }
+app.get('/cart/:id(\\d+)', (req, res) => {
+  res.send(`Payment methods for cart ${req.params.id}`);
 });
 
 app.get('/available_payments', (req, res) => {
-  const paymentMethods = {
+  const payMethods = {
     payment_methods: {
       credit_cards: true,
       paypal: false,
     },
   };
-  res.json(paymentMethods);
+  res.json(payMethods);
 });
 
 app.post('/login', (req, res) => {
-  const { username } = req.body;
-  if (username) {
-    res.send(`Welcome ${username}`);
+  const { userName } = req.body;
+  if (userName) {
+    res.send(`Welcome ${userName}`);
   } else {
-    res.status(400).send('Username is required');
+    res.status(404).send();
   }
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`API available on localhost port ${port}`);
 });
 
-module.exports = app;
+module.exports = server;
