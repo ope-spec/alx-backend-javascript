@@ -1,32 +1,49 @@
-const fs = require('fs');
+const { readFile } = require('fs');
 
-function countStudents(path) {
+function countstudentFields(fileName) {
+  const studentFields = {};
+  const fieldCounts = {};
+  let length = 0;
+
   return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-      if (err) {
-        reject(new Error('Cannot load the database'));
-        return;
+    readFile(fileName, (error, data) => {
+      if (error) {
+        reject(Error('Cannot load the database'));
       }
+	  else {
+        const lines = data.toString().split('\n');
 
-      const lines = data.trim().split('\n').filter(Boolean);
+        for (let i = 0; i < lines.length; i += 1) {
+          if (lines[i]) {
+            length += 1;
+            const field = lines[i].toString().split(',');
+            if (Object.prototype.hasOwnProperty.call(studentFields, field[3])) {
+              studentFields[field[3]].push(field[0]);
+            } else {
+              studentFields[field[3]] = [field[0]];
+            }
+            if (Object.prototype.hasOwnProperty.call(fieldCounts, field[3])) {
+              fieldCounts[field[3]] += 1;
+            }
+			else {
+              fieldCounts[field[3]] = 1;
+            }
+          }
+        }
 
-      const fieldCounts = {};
+        const l = length - 1;
+        console.log(`Number of studentFields: ${l}`);
+        for (const [key, value] of Object.entries(fieldCounts)) {
+          if (key !== 'field') {
+            console.log(`Number of studentFields in ${key}: ${value}. List: ${studentFields[key].join(', ')}`);
+          }
+        }
 
-      lines.forEach((line) => {
-        const [, , , field] = line.split(',');
-        fieldCounts[field] = (fieldCounts[field] || 0) + 1; // Increment the count for the field
-      });
+        resolve(data);
 
-      console.log(`Number of students: ${lines.length}`);
-
-      Object.entries(fieldCounts).forEach(([field, count]) => {
-        const students = lines.filter((line) => line.endsWith(`,${field}`)).map((line) => line.split(',')[0]);
-        console.log(`Number of students in ${field}: ${count}. List: ${students.join(', ')}`);
-      });
-
-      resolve();
+      }
     });
   });
 }
 
-module.exports = countStudents;
+module.exports = countstudentFields;
